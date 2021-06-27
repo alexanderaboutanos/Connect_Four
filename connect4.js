@@ -5,30 +5,39 @@
  * board fills (tie)
  */
 
-var WIDTH = 7;
-var HEIGHT = 6;
+let WIDTH = 7;
+let HEIGHT = 6;
 
-var currPlayer = 1; // active player: 1 or 2
-var board = []; // array of rows, each row is array of cells  (board[y][x])
+let currPlayer = 1; // active player: 1 or 2
+let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
-  // TODO: set "board" to empty HEIGHT x WIDTH matrix array
-}
+  // TODO: set "board" to empty HEIGHT x WIDTH matrix array **DONE**
+  for (let i = 0; i < HEIGHT; i++){
+    board.push([])
+      for (let j = 0; j < WIDTH; j ++){
+        board[i].push(null)
+      };
+  };
+};
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
 function makeHtmlBoard() {
-  // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
+  // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board" **DONE**
+  let htmlBoard = document.getElementById("board")
 
-  // TODO: add comment for this code
-  var top = document.createElement("tr");
+  // TODO: add comment for this code **DONE**
+  // create a new table row, add an id, add an eventListener
+  let top = document.createElement("tr");
   top.setAttribute("id", "column-top");
   top.addEventListener("click", handleClick);
 
+  // add cells within the top table row to match the width, add ids, attach the cells into the row.
   for (var x = 0; x < WIDTH; x++) {
     var headCell = document.createElement("td");
     headCell.setAttribute("id", x);
@@ -36,7 +45,8 @@ function makeHtmlBoard() {
   }
   htmlBoard.append(top);
 
-  // TODO: add comment for this code
+  // TODO: add comment for this code **DONE**
+  // adds rows and cells within each row, with corresponding ids
   for (var y = 0; y < HEIGHT; y++) {
     const row = document.createElement("tr");
     for (var x = 0; x < WIDTH; x++) {
@@ -52,36 +62,55 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  let y = 0;
+  for (let i = HEIGHT-1; i >= 0; i--){
+
+    // check if top cell is filled, if so, return null
+    if (board[0][x] !== null){
+      return y = null;
+    };
+
+    // find topmost empty cell, return that height
+    if (board[i][x] === null){
+      return y += i; 
+    };
+  };
+  return y
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
+  let newDiv = document.createElement("div");
+  newDiv.classList.add("piece", `p${currPlayer}`);
+  let targetTd = document.getElementById(`${y}-${x}`);
+  targetTd.append(newDiv);
 }
 
 /** endGame: announce game end */
 
 function endGame(msg) {
-  // TODO: pop up alert message
+  // TODO: pop up alert message **DONE**
+  alert(msg)
 }
 
 /** handleClick: handle click of column top to play piece */
 
 function handleClick(evt) {
   // get x from ID of clicked cell
-  var x = +evt.target.id;
+  let x = +evt.target.id;
 
   // get next spot in column (if none, ignore click)
-  var y = findSpotForCol(x);
+  let y = findSpotForCol(x);
   if (y === null) {
     return;
   }
 
   // place piece in board and add to HTML table
-  // TODO: add line to update in-memory board
+  // TODO: add line to update in-memory board **DONE?**
   placeInTable(y, x);
+  board[y].splice(x, 1, currPlayer);
 
   // check for win
   if (checkForWin()) {
@@ -89,10 +118,13 @@ function handleClick(evt) {
   }
 
   // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
+  // TODO: check if all cells in board are filled; if so call, call endGame **DONE(not_checked)**
+  let isEntireBoardFilled = board.every((row) => {row.every((cellVal) => cellVal !== null)})
+  if (isEntireBoardFilled){endGame();}
 
   // switch players
-  // TODO: switch currPlayer 1 <-> 2
+  // TODO: switch currPlayer 1 <-> 2 ** DONE
+  currPlayer === 1 ? currPlayer += 1 : currPlayer -= 1
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
