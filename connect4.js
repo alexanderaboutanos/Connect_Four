@@ -115,7 +115,7 @@ function handleClick(evt) {
 
   // check for tie --> if all cells in board are filled call endGame 
   let isEntireBoardFilled = board.every((row) => {row.every((cellVal) => cellVal !== null)})
-  if (isEntireBoardFilled){endGame()}
+  if (isEntireBoardFilled){endGame("Tie!")}
 
   // switch players --> currPlayer 1 <-> 2 
   currPlayer === 1 ? currPlayer += 1 : currPlayer -= 1
