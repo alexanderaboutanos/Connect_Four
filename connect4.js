@@ -16,23 +16,21 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
-  // TODO: set "board" to empty HEIGHT x WIDTH matrix array **DONE**
   for (let i = 0; i < HEIGHT; i++){
     board.push([])
-      for (let j = 0; j < WIDTH; j ++){
-        board[i].push(null)
-      };
+    for (let j = 0; j < WIDTH; j ++){
+      board[i].push(null)
+    };
   };
 };
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
 function makeHtmlBoard() {
-  // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board" **DONE**
+  // get "htmlBoard" variable from the item in HTML w/ID of "board"
   let htmlBoard = document.getElementById("board")
 
-  // TODO: add comment for this code **DONE**
-  // create a new table row, add an id, add an eventListener
+  // create a new table row for the top of the board, add an id, add an eventListener
   let top = document.createElement("tr");
   top.setAttribute("id", "column-top");
   top.addEventListener("click", handleClick);
@@ -45,8 +43,8 @@ function makeHtmlBoard() {
   }
   htmlBoard.append(top);
 
-  // TODO: add comment for this code **DONE**
-  // adds rows and cells within each row, with corresponding ids
+  // now that we've created the special case first row, we must create the rest of the HTML board...
+  // add rows and cells within each row, with corresponding ids
   for (var y = 0; y < HEIGHT; y++) {
     const row = document.createElement("tr");
     for (var x = 0; x < WIDTH; x++) {
@@ -61,9 +59,8 @@ function makeHtmlBoard() {
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
 function findSpotForCol(x) {
-  // TODO: write the real version of this, rather than always returning 0
   let y = 0;
-  for (let i = HEIGHT-1; i >= 0; i--){
+  for (let i = (HEIGHT-1); i >= 0; i--){
 
     // check if top cell is filled, if so, return null
     if (board[0][x] !== null){
@@ -72,7 +69,7 @@ function findSpotForCol(x) {
 
     // find topmost empty cell, return that height
     if (board[i][x] === null){
-      return y += i; 
+      return y = i; 
     };
   };
   return y
@@ -81,7 +78,7 @@ function findSpotForCol(x) {
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
-  // TODO: make a div and insert into correct table cell
+  // make a div, add a class of player#, and insert it into correct table cell
   let newDiv = document.createElement("div");
   newDiv.classList.add("piece", `p${currPlayer}`);
   let targetTd = document.getElementById(`${y}-${x}`);
@@ -91,7 +88,7 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  // TODO: pop up alert message **DONE**
+  // pop up alert message
   alert(msg)
 }
 
@@ -107,8 +104,7 @@ function handleClick(evt) {
     return;
   }
 
-  // place piece in board and add to HTML table
-  // TODO: add line to update in-memory board **DONE?**
+  // place piece in board and add to HTML table, and update in-memory board
   placeInTable(y, x);
   board[y].splice(x, 1, currPlayer);
 
@@ -117,13 +113,11 @@ function handleClick(evt) {
     return endGame(`Player ${currPlayer} won!`);
   }
 
-  // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame **DONE(not_checked)**
+  // check for tie --> if all cells in board are filled call endGame 
   let isEntireBoardFilled = board.every((row) => {row.every((cellVal) => cellVal !== null)})
-  if (isEntireBoardFilled){endGame();}
+  if (isEntireBoardFilled){endGame()}
 
-  // switch players
-  // TODO: switch currPlayer 1 <-> 2 ** DONE
+  // switch players --> currPlayer 1 <-> 2 
   currPlayer === 1 ? currPlayer += 1 : currPlayer -= 1
 }
 
@@ -145,7 +139,7 @@ function checkForWin() {
     );
   }
 
-  // TODO: read and understand this code. Add comments to help you.
+  // iterate through each cell, setting variables equal to 4 nested arrays. for each set of nested arrays, check to see if all cells match the current player.
 
   for (var y = 0; y < HEIGHT; y++) {
     for (var x = 0; x < WIDTH; x++) {
